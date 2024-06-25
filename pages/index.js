@@ -1,5 +1,9 @@
-import Layout from "@/layout";
+// import Layout from "@/layout";
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+
+const LayoutComponent = dynamic(() => import("@/layout"));
 
 export default function Main() {
   useEffect(() => {
@@ -10,9 +14,14 @@ export default function Main() {
   }, []);
   return (
     <>
-      <Layout metaTitle="Home" metaDescription="Ini adalah halaman beranda">
+      <LayoutComponent
+        metaTitle="Home"
+        metaDescription="Ini adalah halaman beranda"
+      >
         <p>Home</p>
-      </Layout>
+        <Image src="/next.png" alt="Next.js Logo" width={200} height={200} />
+        <img src="/next.png" alt="Next.js Logo" width={200} height={200} />
+      </LayoutComponent>
     </>
   );
 }
