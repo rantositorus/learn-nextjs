@@ -16,12 +16,19 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useQueries } from "@/hooks/useQueries";
+import fetcher from "@/utils/fetcher";
+import useSWR from "swr";
 const LayoutComponent = dynamic(() => import("@/layout"));
 
 export default function Notes() {
-  const { data, isLoading } = useQueries({
-    prefixurl: "https://service.pace-unv.cloud/api/notes",
-  });
+  // const { data, isLoading } = useQueries({
+  //   prefixurl: "https://service.pace-unv.cloud/api/notes",
+  // });
+  const { data, isLoading } = useSWR(
+    "https://service.pace-unv.cloud/api/notes",
+    fetcher,
+    { revalidateOnFocus: true }
+  );
   const router = useRouter();
   const [notes, setNotes] = useState();
 
