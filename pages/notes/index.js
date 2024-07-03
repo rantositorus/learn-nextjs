@@ -11,12 +11,17 @@ import {
   Text,
   Button,
   Box,
+  Spinner,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useQueries } from "@/hooks/useQueries";
 const LayoutComponent = dynamic(() => import("@/layout"));
 
 export default function Notes() {
+  const { data, isLoading } = useQueries({
+    prefixurl: "https://service.pace-unv.cloud/api/notes",
+  });
   const router = useRouter();
   const [notes, setNotes] = useState();
 
@@ -35,16 +40,6 @@ export default function Notes() {
     }
   };
 
-  useEffect(() => {
-    async function fetchingData() {
-      const res = await fetch("https://service.pace-unv.cloud/api/notes");
-      const listNotes = await res.json();
-      setNotes(listNotes);
-    }
-    fetchingData();
-  }, []);
-  console.log(notes);
-
   return (
     <>
       <LayoutComponent metaTitle="Notes">
@@ -57,9 +52,14 @@ export default function Notes() {
               Add Notes
             </Button>
           </Flex>
+          {isLoading && (
+            <Flex justifyContent="center" alignItems="center" h="100vh">
+              <Spinner />
+            </Flex>
+          )}
           <Flex>
             <Grid templateColumns="repeat(4, 1fr)" gap={5}>
-              {notes?.data?.map((item) => (
+              {data?.data?.map((item) => (
                 <GridItem>
                   <Card>
                     <CardHeader>
