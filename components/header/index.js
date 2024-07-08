@@ -3,20 +3,16 @@ import Link from "next/link";
 import styles from "./styles.module.css";
 import { Menu, MenuButton, Button, MenuList, MenuItem } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { useQueries } from "@/hooks/useQueries";
 import { useMutation } from "@/hooks/useMutation";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { UserContext } from "@/context/userContext";
 
 function Header() {
+  const userData = useContext(UserContext);
   const router = useRouter();
   const { mutate } = useMutation();
-  const { data } = useQueries({
-    prefixurl: "https://service.pace-unv.cloud/api/user/me",
-    headers: {
-      Authorization: `Bearer ${Cookies.get("user_token")}`,
-    },
-  });
 
   const HandleLogout = async () => {
     const response = await mutate({
@@ -53,7 +49,7 @@ function Header() {
         <li>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-              {data?.data?.name}
+              {userData?.name}
             </MenuButton>
             <MenuList>
               <MenuItem onClick={() => HandleLogout()}>Logout</MenuItem>
